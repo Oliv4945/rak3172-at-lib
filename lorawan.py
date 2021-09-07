@@ -23,3 +23,9 @@ if __name__ == "__main__":
     print(f"Module joinEUI: 0x{device.joineui}")
     print(f"Module AppKey: 0x{device.appkey}")
 
+    # Join the network
+    device.join()
+    while device.join_status() is not RAK3172.JOIN_STATUS.JOINED:
+        False
+    print("Device has joined the network")
+

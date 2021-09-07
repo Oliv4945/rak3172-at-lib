@@ -14,6 +14,14 @@ class RAK3172:
         P2P = 0
         LORAWAN = 1
 
+    class JOIN_MODES:
+        ABP = 0
+        OTAA = 1
+
+    class JOIN_STATUS:
+        NOT_JOINED = 0
+        JOINED = 1
+
     def __init__(self, serial_port, network_mode, verbose=False):
         self.serial_port = serial_port
         self.verbose = verbose
@@ -106,6 +114,20 @@ class RAK3172:
     @serial_port.setter
     def serial_port(self, port):
         self.__serial_port = port
+
+    def join(self):
+        ans = self.send_command(f"AT+NJM={RAK3172.JOIN_MODES.OTAA}")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to get join mode")
+        ans = self.send_command("AT+JOIN=1:0:8:0")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to join")
+
+    def join_status(self):
+        ans = self.send_command(f"AT+NJS=?")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to get join status")
+        return int(ans[0])
 
     def reset_soft(self):
         ans = self.send_command(f"ATZ")
