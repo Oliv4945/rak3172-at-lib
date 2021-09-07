@@ -152,6 +152,12 @@ class RAK3172:
         else:
             return None
 
+    def send_payload(self, fport, payload, confirmed=False):
+        # TODO - Implement confirm messages
+        ans = self.send_command(f'AT+SEND={fport}:{payload.decode("ASCII")}')
+        if ans[-2] != "OK":
+            print("ERROR - Unable to send payload")
+
     def status(self):
         ans = self.send_command("AT")
         if ans[-2] == "OK":

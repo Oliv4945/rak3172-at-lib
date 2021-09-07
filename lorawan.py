@@ -29,3 +29,5 @@ if __name__ == "__main__":
         False
     print("Device has joined the network")
 
+    # Send a payload
+    device.send_payload(2, b"FEED")
