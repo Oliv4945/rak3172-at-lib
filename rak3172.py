@@ -4,6 +4,7 @@
 
 import serial
 import sys
+import time
 
 
 class RAK3172:
@@ -32,6 +33,10 @@ class RAK3172:
         # Ensure network mode
         self.network_mode = network_mode
 
+    @property
+    def network_mode(self):
+        return self.__network_mode
+
     @network_mode.setter
     def network_mode(self, network_mode):
         ans = self.send_command("AT+NWM=?")
@@ -41,6 +46,50 @@ class RAK3172:
         if int(ans[0]) != network_mode:
             ans = self.send_command(f"AT+NWM={network_mode}")
         self.__network_mode = network_mode
+
+    @property
+    def appkey(self):
+        ans = self.send_command("AT+APPKEY=?")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to get APPKEY")
+            exit()
+        return ans[0].upper()
+
+    @appkey.setter
+    def appkey(self, appkey):
+        ans = self.send_command(f"AT+APPKEY={appkey}")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to set AppKEY")
+            exit()
+        # RAK3172 needs to be restarted to take it into account
+        self.reset_soft()
+
+    @property
+    def deveui(self):
+        ans = self.send_command("AT+DEVEUI=?")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to get devEUI")
+            exit()
+        return ans[0].upper()
+
+    # TODO - Implement devEUI setter
+
+    @property
+    def joineui(self):
+        ans = self.send_command("AT+APPEUI=?")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to get joinEUI")
+            exit()
+        return ans[0].upper()
+
+    @joineui.setter
+    def joineui(self, joineui):
+        ans = self.send_command(f"AT+APPEUI={joineui}")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to set joinEUI")
+            exit()
+        # RAK3172 needs to be restarted to take it into account
+        self.reset_soft()
 
     @property
     def verbose(self):

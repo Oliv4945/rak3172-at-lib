@@ -15,3 +15,11 @@ if __name__ == "__main__":
     device = RAK3172(
         serial_port=port, network_mode=RAK3172.NETWORK_MODES.LORAWAN, verbose=True
     )
+    # device.joineui = "0102030405060708"
+    # device.appkey = "11111111111111111111111111111113"
+
+    # Display device informations
+    print(f"Module devEUI: 0x{device.deveui}")
+    print(f"Module joinEUI: 0x{device.joineui}")
+    print(f"Module AppKey: 0x{device.appkey}")
+
