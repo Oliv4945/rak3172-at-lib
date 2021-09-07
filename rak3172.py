@@ -41,6 +41,12 @@ class RAK3172:
     def serial_port(self, port):
         self.__serial_port = port
 
+    def reset_soft(self):
+        ans = self.send_command(f"ATZ")
+        # Give some time to the device to restart
+        time.sleep(1.0)
+        self.serial.flushInput()
+
     def send_command(self, cmd, ignore=False):
         self.serial.write(cmd.encode("ASCII") + b"\r\n")
 
