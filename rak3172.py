@@ -9,6 +9,10 @@ import sys
 class RAK3172:
     serial = None
 
+    class NETWORK_MODES:
+        P2P = 0
+        LORAWAN = 1
+
     def __init__(self, serial_port, network_mode, verbose=False):
         self.serial_port = serial_port
         self.verbose = verbose
@@ -24,6 +28,19 @@ class RAK3172:
         if self.status() is not True:
             print("ERROR - Unable to detect chip")
             exit()
+
+        # Ensure network mode
+        self.network_mode = network_mode
+
+    @network_mode.setter
+    def network_mode(self, network_mode):
+        ans = self.send_command("AT+NWM=?")
+        if ans[-2] != "OK":
+            print("ERROR - Unable to check network mode")
+            exit()
+        if int(ans[0]) != network_mode:
+            ans = self.send_command(f"AT+NWM={network_mode}")
+        self.__network_mode = network_mode
 
     @property
     def verbose(self):
