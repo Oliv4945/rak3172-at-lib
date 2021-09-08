@@ -13,7 +13,7 @@ Currently implemented properties:
 * Set `network_mode`: `NETWORK_MODES.P2P` or `NETWORK_MODES.OTAA`
 * Set/Get `verbose` mode to display all serial communications
 
-functions:
+Functions:
 
 * `join`: Join a LoRaWAN network
 * `join_status`: Get join state
@@ -21,6 +21,11 @@ functions:
 * `send_command`: Send an arbitrary AT command
 * `send_payload`: Send a LoRaWAN payload. `payload` must be of `byte` type
 * `status`: Return device status, mostly to check UART connectivity
+
+Events (implemented through a callback):
+
+* `JOINED`: Device has joined the network
+* `SEND_CONFIRMATION`: Uplink confirmation status: `True` or `False`
 
 # Installation
 Clone the project then install python dependancies
@@ -42,11 +47,12 @@ python lorawan.py /dev/ttyS20
 
 `lorawan.py` is an example file, it:
 
+* Define events callback
 * Instanciate the RAK3172 object
 * Set JoinEui (AppEui) and AppKey if required
 * Display the EUIs
 * Join
 * Send a message!
 
-`rak3172.py` is the class containing the RAK3172 object and its methods.
+`rak3172.py` is the class containing the RAK3172 object and its methods. An RX thread is started in background
 

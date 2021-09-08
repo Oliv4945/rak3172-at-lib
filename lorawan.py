@@ -1,3 +1,4 @@
+from threading import Event
 from rak3172 import RAK3172
 import signal
 import sys
@@ -9,16 +10,20 @@ class STATES:
     SEND_DATA = 2
     SLEEP = 3
 
-
+device = None
 state = None
 
 
-def events(type, parameters):
+def events(type, parameter):
     global state
 
     if type == RAK3172.EVENTS.JOINED:
         state = STATES.JOINED
         print("EVENT - Joined")
+    elif type == RAK3172.EVENTS.SEND_CONFIRMATION:
+        print(f"EVENT - Confirmed: {parameter}")
+    else:
+        print("EVENT - Unknown event {type}")
 
 
 def handler_timeout_tx(signal, frame):
@@ -27,6 +32,7 @@ def handler_timeout_tx(signal, frame):
 
 
 def handler_sigint(signal, frame):
+    device.close()
     sys.exit(0)
 
 
@@ -62,8 +68,6 @@ if __name__ == "__main__":
     # Join the network
     device.join()
     state = STATES.JOINING
-    while device.join_status() is not RAK3172.JOIN_STATUS.JOINED:
-        False
 
     while True:
         if state == STATES.JOINED:
