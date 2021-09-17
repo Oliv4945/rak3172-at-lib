@@ -10,6 +10,7 @@ class STATES:
     SEND_DATA = 2
     SLEEP = 3
 
+
 device = None
 state = None
 
@@ -57,6 +58,7 @@ if __name__ == "__main__":
         verbose=True,
         callback_events=events,
     )
+    # device.deveui = "0807060504030201"
     # device.joineui = "0102030405060708"
     # device.appkey = "11111111111111111111111111111113"
 

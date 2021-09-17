@@ -129,7 +129,14 @@ class RAK3172:
             exit()
         return data
 
-    # TODO - Implement devEUI setter
+    @deveui.setter
+    def deveui(self, deveui):
+        status, _ = self.send_command(f"AT+DEVEUI={deveui}")
+        if status != "OK":
+            print("ERROR - Unable to set devEUI")
+            exit()
+        # RAK3172 needs to be restarted to take it into account
+        self.reset_soft()
 
     @property
     def joineui(self):
